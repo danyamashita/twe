@@ -8,16 +8,22 @@ const NAV_LINKS = [
   { label: 'Conformidade', href: '#conformidade' },
 ];
 
+// Hero section is 600vh tall — CTA bar shows from 80px until end of hero
+const HERO_HEIGHT_VH = 600;
+
 export default function Header() {
   const [scrolled,    setScrolled]    = useState(false);
   const [menuOpen,    setMenuOpen]    = useState(false);
   const [ctaVisible,  setCtaVisible]  = useState(false);
+  const [heroActive,  setHeroActive]  = useState(false); // mobile bottom bar
 
   useEffect(() => {
     const onScroll = () => {
       const y = window.scrollY;
+      const heroEnd = window.innerHeight * (HERO_HEIGHT_VH / 100);
       setScrolled(y > 10);
       setCtaVisible(y > 80);
+      setHeroActive(y > 80 && y < heroEnd - window.innerHeight);
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -62,8 +68,8 @@ export default function Header() {
           ))}
         </nav>
 
-        {/* CTA */}
-        <a href="#cta" className="btn-primary" style={{
+        {/* CTA — hidden on mobile (replaced by bottom bar) */}
+        <a href="#cta" className="btn-primary header-cta" style={{
           padding: '0.5rem 1.25rem', fontSize: '0.8rem',
           opacity: ctaVisible ? 1 : 0,
           transform: ctaVisible ? 'translateX(0)' : 'translateX(8px)',
@@ -90,6 +96,25 @@ export default function Header() {
         </button>
       </header>
 
+      {/* Mobile: fixed bottom CTA — visible only during hero scroll */}
+      <div className="mobile-bottom-cta" style={{
+        position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1000,
+        padding: '1rem 1.5rem',
+        background: 'linear-gradient(to top, rgba(12,12,15,0.95) 70%, transparent)',
+        display: 'flex', justifyContent: 'center', alignItems: 'center',
+        opacity: heroActive ? 1 : 0,
+        transform: heroActive ? 'translateY(0)' : 'translateY(12px)',
+        transition: 'opacity 400ms ease, transform 400ms ease',
+        pointerEvents: heroActive ? 'auto' : 'none',
+      }}>
+        <a href="#cta" className="btn-primary" style={{
+          width: '100%', maxWidth: '360px', textAlign: 'center',
+          padding: '0.875rem 1.5rem', fontSize: '0.9375rem',
+        }}>
+          Fale com Especialistas →
+        </a>
+      </div>
+
       {/* Mobile menu */}
       {menuOpen && (
         <div style={{
@@ -113,6 +138,10 @@ export default function Header() {
         @media (max-width: 768px) {
           .mobile-hamburger { display: block !important; }
           header nav { display: none !important; }
+          .header-cta { display: none !important; }
+        }
+        @media (min-width: 769px) {
+          .mobile-bottom-cta { display: none !important; }
         }
       `}</style>
     </>

@@ -1,12 +1,15 @@
 import { useCounterAnimation } from '../hooks/useCounterAnimation';
 
-const metrics = [
-  { target: 25,   suffix: '+',  label: 'anos de engenharia industrial',               color: '#C49A3C', decimals: 0 },
-  { target: 400,  suffix: '%',  label: 'ganho de capacidade no mesmo m²',             color: '#C49A3C', decimals: 0 },
-  { target: 99.9, suffix: '%',  label: 'acuracidade na separação de pedidos',         color: '#3279A3', decimals: 1 },
-  { target: 1,    suffix: 'º',  label: 'instalador homologado AutoStore na Am. Latina', color: '#3279A3', decimals: 0 },
-  { target: 2,    prefix: '24h→', suffix: 'h', label: 'redução no tempo de ciclo de pedido', color: '#C49A3C', decimals: 0 },
-  { target: 99.7, suffix: '%',  label: 'uptime global dos sistemas instalados',       color: '#3279A3', decimals: 1 },
+const tweMetrics = [
+  { target: 25,  suffix: '+', label: 'anos de engenharia industrial',            color: '#C49A3C', decimals: 0 },
+  { target: 1,   suffix: 'º', label: 'instalador homologado AutoStore na Am. Latina', color: '#C49A3C', decimals: 0 },
+];
+
+const autoStoreMetrics = [
+  { target: 400,  suffix: '%',  label: 'ganho de capacidade no mesmo m²',          color: '#3279A3', decimals: 0 },
+  { target: 2,    prefix: '24h→', suffix: 'h', label: 'redução no tempo de ciclo de pedido', color: '#3279A3', decimals: 0 },
+  { target: 99.9, suffix: '%',  label: 'acuracidade na separação de pedidos',      color: '#3279A3', decimals: 1 },
+  { target: 99.7, suffix: '%',  label: 'uptime global dos sistemas instalados',    color: '#3279A3', decimals: 1 },
 ];
 
 function MetricCard({ target, prefix, suffix, label, color, decimals }) {
@@ -34,6 +37,20 @@ function MetricCard({ target, prefix, suffix, label, color, decimals }) {
   );
 }
 
+function GroupLabel({ children }) {
+  return (
+    <div style={{
+      fontFamily: '"JetBrains Mono", monospace', fontSize: '0.6rem',
+      letterSpacing: '0.2em', textTransform: 'uppercase',
+      color: 'rgba(232,232,236,0.25)', paddingBottom: '0.25rem',
+      borderBottom: '1px solid rgba(255,255,255,0.04)',
+      marginBottom: '0', gridColumn: '1 / -1',
+    }}>
+      {children}
+    </div>
+  );
+}
+
 export default function ImpactMetrics() {
   return (
     <section id="impacto" style={{
@@ -41,7 +58,7 @@ export default function ImpactMetrics() {
       padding: 'clamp(5rem,10vw,10rem) 0',
     }}>
       <div className="section-container">
-        <div style={{ marginBottom: '3.5rem' }}>
+        <div className="impact-header" style={{ marginBottom: '3.5rem' }}>
           <span className="section-badge">Resultados</span>
           <h2 style={{
             fontFamily: '"Inter Tight", sans-serif', fontWeight: 900,
@@ -51,9 +68,26 @@ export default function ImpactMetrics() {
             Números que<br />falam por si.
           </h2>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px,1fr))' }}>
-          {metrics.map((m, i) => <MetricCard key={i} {...m} />)}
+
+        {/* Group 1: TWE */}
+        <div className="impact-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px,1fr))', marginBottom: '0' }}>
+          <GroupLabel>TWE</GroupLabel>
+          {tweMetrics.map((m, i) => <MetricCard key={i} {...m} />)}
         </div>
+
+        {/* Group 2: AutoStore */}
+        <div className="impact-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px,1fr))', marginTop: '2.5rem' }}>
+          <GroupLabel>AutoStore</GroupLabel>
+          {autoStoreMetrics.map((m, i) => <MetricCard key={i} {...m} />)}
+        </div>
+
+        <style>{`
+          @media (max-width: 768px) {
+            .impact-header { text-align: center; }
+            .impact-header .section-badge { margin-inline: auto; }
+            .impact-grid > div { text-align: center; align-items: center; }
+          }
+        `}</style>
       </div>
     </section>
   );

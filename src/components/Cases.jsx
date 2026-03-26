@@ -50,11 +50,11 @@ export default function Cases() {
               background: '#fff', borderRadius: '12px', overflow: 'hidden',
               boxShadow: '0 1px 4px rgba(0,0,0,0.05)', display: 'flex', flexWrap: 'wrap',
             }}>
-              <div style={{ flex: '0 0 300px', minHeight: '220px', background: '#e8e8e8' }}>
+              <div className="case-img-wrap">
                 <img src={c.frame} alt={c.label} loading="lazy"
                   style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
               </div>
-              <div style={{ flex: '1 1 300px', padding: '2.25rem' }}>
+              <div className="case-txt-wrap" style={{ flex: '1 1 300px', padding: '2.25rem' }}>
                 <p style={{
                   fontFamily: '"JetBrains Mono", monospace', fontSize: '0.65rem',
                   letterSpacing: '0.15em', textTransform: 'uppercase', color: '#8A8A96', marginBottom: '0.75rem',
@@ -88,6 +88,24 @@ export default function Cases() {
             </div>
           ))}
         </div>
+        <style>{`
+          .case-img-wrap {
+            flex: 0 0 300px;
+            min-height: 220px;
+            background: #e8e8e8;
+          }
+          @media (max-width: 768px) {
+            .case-img-wrap {
+              flex: none;
+              width: 100%;
+              min-height: 200px;
+              aspect-ratio: 16/9;
+            }
+            .case-txt-wrap {
+              text-align: center;
+            }
+          }
+        `}</style>
       </div>
     </section>
   );

@@ -41,17 +41,14 @@ function TechBlock({ block }) {
   const { frame, tag, headline, detail, highlight, metric, imgLeft } = block;
 
   const Img = () => (
-    <div style={{
-      flex: '0 0 48%', borderRadius: '12px', overflow: 'hidden',
-      aspectRatio: '16/9', background: '#131318',
-    }}>
+    <div className="tech-img-wrap">
       <img src={frame} alt={tag} loading="lazy"
         style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', opacity: 0.9 }} />
     </div>
   );
 
   const Txt = () => (
-    <div style={{ flex: '0 0 calc(52% - 3.5rem)', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '1rem' }}>
+    <div className="tech-txt-wrap">
       <p style={{
         fontFamily: '"JetBrains Mono", monospace', fontSize: '0.65rem',
         letterSpacing: '0.22em', textTransform: 'uppercase', color: '#255A75', margin: 0,
@@ -88,10 +85,7 @@ function TechBlock({ block }) {
   );
 
   return (
-    <div style={{
-      display: 'flex', flexWrap: 'wrap', gap: '3.5rem', alignItems: 'center',
-      flexDirection: imgLeft ? 'row' : 'row-reverse',
-    }}>
+    <div className={`tech-block ${imgLeft ? 'img-left' : 'img-right'}`}>
       <Img /><Txt />
     </div>
   );
@@ -127,9 +121,42 @@ export default function AutoStoreTech() {
       </div>
 
       <style>{`
+        .tech-block {
+          display: flex;
+          gap: 3.5rem;
+          align-items: center;
+        }
+        .tech-block.img-left  { flex-direction: row; }
+        .tech-block.img-right { flex-direction: row-reverse; }
+
+        .tech-img-wrap {
+          flex: 0 0 48%;
+          border-radius: 12px;
+          overflow: hidden;
+          aspect-ratio: 16/9;
+          background: #131318;
+        }
+        .tech-txt-wrap {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: 1rem;
+        }
+
         @media (max-width: 768px) {
-          #tecnologia [style*="flex-direction: row"],
-          #tecnologia [style*="flex-direction: row-reverse"] { flex-direction: column !important; }
+          .tech-block {
+            flex-direction: column !important;
+            gap: 1.75rem;
+          }
+          .tech-img-wrap {
+            flex: none;
+            width: 100%;
+            aspect-ratio: 4/3;
+          }
+          .tech-txt-wrap {
+            width: 100%;
+          }
         }
       `}</style>
     </section>
